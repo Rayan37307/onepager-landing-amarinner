@@ -25,7 +25,7 @@ export function SectionHeading({ children }) {
 
 export default function Section({ id, title, subtitle, children }) {
   return (
-    <section id={id} className="bg-cream">
+    <section id={id} className="border-t border-black/5 bg-cream">
       <div className="mx-auto max-w-page px-4 py-12 sm:px-6 sm:py-14">
         {title && <SectionHeading>{tpl(title)}</SectionHeading>}
         {subtitle && (

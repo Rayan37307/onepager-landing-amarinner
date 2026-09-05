@@ -18,7 +18,7 @@ export default function WhatsApp() {
   }`;
 
   return (
-    <section className="bg-cream">
+    <section className="border-t border-black/5 bg-cream">
       <div className="mx-auto max-w-md px-4 py-8 sm:max-w-lg sm:px-6">
         {whatsapp.title && (
           <p data-reveal className="mb-4 text-center text-lg font-bold text-zinc-900">

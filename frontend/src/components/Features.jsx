@@ -9,7 +9,7 @@ export default function Features() {
   if (!features?.items?.length) return null;
 
   return (
-    <Section title={features.title} tint="magenta">
+    <Section title={features.title}>
       <ul data-reveal className="mx-auto grid max-w-xl gap-3">
         {features.items.map((item) => (
           <li key={item.text} className="flex items-start gap-3">

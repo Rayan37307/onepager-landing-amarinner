@@ -115,7 +115,7 @@ export default function OrderForm() {
   }
 
   return (
-    <section id="order" ref={sectionRef} className="border-t border-zinc-200 bg-magenta-50/40">
+    <section id="order" ref={sectionRef} className="border-t border-zinc-200 bg-cream">
       <div className="mx-auto max-w-lg px-4 py-12 sm:px-6">
         <h2 data-reveal className="text-2xl font-bold tracking-tight text-zinc-900">
           {UI.formTitle}
