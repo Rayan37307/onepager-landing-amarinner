@@ -46,6 +46,32 @@ export function WhatsAppIcon(props) {
   );
 }
 
+export function FacebookIcon(props) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H16.7V3.7C16.4 3.66 15.4 3.6 14.2 3.6c-2.4 0-4 1.46-4 4.15V9.9H7.5V13h2.7v8h3.3Z" />
+    </svg>
+  );
+}
+
+export function InstagramIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function TiktokIcon(props) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M16.5 2h-3v13.6a2.9 2.9 0 1 1-2.1-2.8v-3.1a6 6 0 1 0 5.1 5.94V9.3a6.9 6.9 0 0 0 4 1.27V7.6a3.9 3.9 0 0 1-4-3.9V2Z" />
+    </svg>
+  );
+}
+
 export function StarIcon({ filled = true, ...props }) {
   return (
     <svg

@@ -5,7 +5,7 @@ export const PRODUCT = {
   name: 'ইন্ডিয়ান গুডি ব্রা',
   variantTag: '৬ পিস কম্বো',
   tagline: 'নরম, আরামদায়ক আর দৈনন্দিন ব্যবহারের জন্য পারফেক্ট — একসাথে ৬টি ব্রা।',
-  price: 970,
+  price: 975,
   compareAtPrice: 1690,
   currency: '৳',
 
@@ -26,8 +26,16 @@ export const PRODUCT = {
 
   // Order-help contact shown in the help section.
   contact: {
-    phone: '01984146600',
-    whatsapp: '8801984146600',
+    phone: '01822999798',
+    whatsapp: '8801822999798',
+  },
+
+  // Social links shown as footer icons.
+  social: {
+    facebook: 'https://www.facebook.com/amarinnerbd',
+    instagram: 'https://www.instagram.com/amarinner',
+    tiktok: 'https://www.tiktok.com/@amarinner',
+    whatsapp: 'https://wa.link/qaz0ya',
   },
 
   // Hero banner shown behind the headline/price. Swaps by viewport width:
@@ -57,13 +65,15 @@ export const PRODUCT = {
   // Leave empty ([]) for products without sizes; the form hides the selector
   // and uses `price` above.
   sizes: [
-    { label: '32', price: 970 },
-    { label: '34', price: 970 },
-    { label: '36', price: 970 },
-    { label: '38', price: 970 },
-    { label: '40', price: 970 },
-    { label: '42', price: 970 },
-    { label: '44', price: 970 },
+    { label: '32', price: 975 },
+    { label: '34', price: 975 },
+    { label: '36', price: 975 },
+    { label: '38', price: 975 },
+    { label: '40', price: 975 },
+    { label: '42', price: 1025 },
+    { label: '44', price: 1025 },
+    { label: '46', price: 1475 },
+    { label: '48', price: 1475 },
   ],
 
   // Colour options shown as a radio group. Leave empty ([]) to hide the
