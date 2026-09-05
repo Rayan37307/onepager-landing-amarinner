@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Anek Bangla", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anek Bangla", ui-sans-serif, system-ui, sans-serif;
+
+  /* The whole page is a single phone-first column, capped narrow so it never
+     sprawls on desktop — Facebook-ad traffic is overwhelmingly mobile.
+     `max-w-page` on every section wrapper keeps one consistent edge. */
+  --container-page: 800px;
+
+  /* Single-colour brand: Hot Magenta (#FF006E). `*-500`/`*-600` are the exact
+     brand value; the rest are tints and shades for bands, borders, hovers,
+     buttons. Replaces the old rose/amber + gold use. */
+  --color-magenta-50: #ffe8f1;
+  --color-magenta-100: #ffc9df;
+  --color-magenta-300: #ff7db3;
+  --color-magenta-400: #ff4593;
+  --color-magenta-500: #ff006e;
+  --color-magenta-600: #ff006e;
+  --color-magenta-700: #d1005b;
+  --color-magenta-800: #a30047;
+
+  /* One calm, evenly-spaced type scale — readable on phones (Bengali needs the
+     size + leading) without the big jumps that make a page look generated.
+     Weight contrast is kept modest too: body 400, emphasis 600, headings 700. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.65;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.55;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.45;
+  --text-2xl: 1.625rem;
+  --text-2xl--line-height: 1.35;
+  --text-3xl: 1.9375rem;
+  --text-3xl--line-height: 1.25;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 1.2;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100;
+  line-height: 1.65;
+  color: #18181b;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hides the scrollbar on horizontal snap-sliders (ProductShowcase) while
+   keeping the element scrollable — the peeking next slide is the affordance. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* CTA attention loop: a diagonal glare sweeps across the button AND the button
+   gives a short wiggle — both on the same 2.6s cycle so they fire together.
+   The glare lives on ::after and is purely decorative (pointer-events:none). */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  animation: btn-nudge 2.6s ease-in-out infinite;
+}
+@keyframes btn-nudge {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  3% {
+    transform: translateX(-2px) rotate(-0.6deg);
+  }
+  6% {
+    transform: translateX(3px) rotate(0.6deg);
+  }
+  9% {
+    transform: translateX(-3px) rotate(-0.5deg);
+  }
+  12% {
+    transform: translateX(2px) rotate(0.3deg);
+  }
+  15%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transform: translateX(-150%) skewX(-20deg);
+  animation: btn-shine-sweep 2.6s ease-in-out infinite;
+}
+@keyframes btn-shine-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  35%,
+  100% {
+    transform: translateX(320%) skewX(-20deg);
+  }
+}
+
+/* Highlighted price — loud on purpose: heavier, larger, tight, with a thick
+   Hot Magenta marker sweeping across the lower two-thirds of the number. */
+.price-hl {
+  font-weight: 800;
+  font-size: 1.18em;
+  letter-spacing: -0.02em;
+  padding-inline: 0.16em;
+  border-radius: 0.1em;
+  background-image: linear-gradient(
+    transparent 38%,
+    rgba(255, 0, 110, 0.22) 38%
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-shine {
+    animation: none;
+  }
+  .btn-shine::after {
+    display: none;
+  }
+}
