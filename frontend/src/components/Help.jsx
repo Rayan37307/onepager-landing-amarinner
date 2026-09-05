@@ -8,7 +8,7 @@ export default function Help() {
   if (!help || !phone) return null;
 
   return (
-    <section className="border-t border-zinc-200 bg-white">
+    <section className="border-t border-zinc-200 bg-cream">
       <div className="mx-auto max-w-page px-4 py-10 text-center sm:px-6">
         <p data-reveal className="text-lg font-bold text-zinc-900">{help.title}</p>
         {help.body && (

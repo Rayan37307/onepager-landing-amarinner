@@ -42,8 +42,8 @@ export const PRODUCT = {
   // `mobile` renders on small screens, `desktop` on ≥640px. Omit a key to reuse
   // the other; omit the whole block to fall back to images[0].
   heroBanner: {
-    desktop: { src: '/amar-inner-landing-page-banner-01.jpg.jpeg', alt: 'ইন্ডিয়ান গুডি ব্রা — ৬ পিস কম্বো' },
-    mobile: { src: '/amar-inner-landing-page-banner-02.jpg.jpeg', alt: 'ইন্ডিয়ান গুডি ব্রা — ৬ পিস কম্বো' },
+    desktop: { src: '/amar-inner-landing-page-banner-01.gif', alt: 'ইন্ডিয়ান গুডি ব্রা — ৬ পিস কম্বো' },
+    mobile: { src: '/amar-inner-landing-page-banner-02.gif', alt: 'ইন্ডিয়ান গুডি ব্রা — ৬ পিস কম্বো' },
   },
 
   // Carousel images shown in the gallery. Drop real photo paths (imported from

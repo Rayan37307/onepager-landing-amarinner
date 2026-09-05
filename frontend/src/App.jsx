@@ -48,7 +48,7 @@ export default function App() {
   );
 
   return (
-    <div ref={scope} className="mx-auto min-h-screen max-w-page bg-white pb-16 shadow-sm">
+    <div ref={scope} className="mx-auto min-h-screen max-w-page bg-cream pb-16 shadow-sm">
       <Header />
       <Hero />
       <ProductShowcase />

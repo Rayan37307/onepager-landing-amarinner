@@ -23,10 +23,9 @@ export function SectionHeading({ children }) {
   );
 }
 
-export default function Section({ id, title, subtitle, tint = false, children }) {
-  const bg = tint ? 'bg-magenta-50/40' : 'bg-white';
+export default function Section({ id, title, subtitle, children }) {
   return (
-    <section id={id} className={bg}>
+    <section id={id} className="bg-cream">
       <div className="mx-auto max-w-page px-4 py-12 sm:px-6 sm:py-14">
         {title && <SectionHeading>{tpl(title)}</SectionHeading>}
         {subtitle && (
