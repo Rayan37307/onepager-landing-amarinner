@@ -35,6 +35,18 @@ export const CONTENT = {
     ],
   },
 
+  // 2b — Countdown timer band, sits right under "কেন নেবেন?". A rolling,
+  // per-visitor countdown: it starts at `durationHours` on first view and is
+  // remembered in the browser, so every visitor sees a live ticking offer.
+  // Set to null / remove the block to hide the section entirely.
+  countdown: {
+    title: 'অফার শেষ হতে বাকি',
+    subtitle: 'সীমিত সময়ের বিশেষ অফার — সময় শেষ হলে দাম বেড়ে যাবে!',
+    durationHours: 6,
+    labels: { hours: 'ঘণ্টা', minutes: 'মিনিট', seconds: 'সেকেন্ড' },
+    expiredText: 'অফারটি প্রায় শেষ — দ্রুত অর্ডার করুন!',
+  },
+
   // 3 — Product showcase ("প্রোডাক্ট দেখুন") — image row only, no captions.
   showcase: {
     title: 'প্রোডাক্ট দেখুন',

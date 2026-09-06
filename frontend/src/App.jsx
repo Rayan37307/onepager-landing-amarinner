@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductShowcase from './components/ProductShowcase';
 import Features from './components/Features';
+import Countdown from './components/Countdown';
 import ProductVideo from './components/ProductVideo';
 import WhatsApp from './components/WhatsApp';
 import Faq from './components/Faq';
@@ -53,6 +54,7 @@ export default function App() {
       <Hero />
       <ProductShowcase />
       <Features />
+      <Countdown />
       <ProductVideo />
       <WhatsApp />
       <OrderForm />

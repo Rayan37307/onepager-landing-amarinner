@@ -127,6 +127,21 @@ body {
   }
 }
 
+/* Countdown band: a slow, soft pulse on the maroon card so the offer reads as
+   live and urgent without any jitter. Decorative only — disabled below. */
+.countdown-glow {
+  animation: countdown-pulse 2.4s ease-in-out infinite;
+}
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 20, 70, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 20, 70, 0);
+  }
+}
+
 /* Emphasised price — heavier and larger than surrounding text, no marker. */
 .price-hl {
   font-weight: 800;
@@ -140,5 +155,8 @@ body {
   }
   .btn-shine::after {
     display: none;
+  }
+  .countdown-glow {
+    animation: none;
   }
 }
