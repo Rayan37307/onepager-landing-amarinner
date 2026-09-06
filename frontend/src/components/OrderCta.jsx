@@ -13,9 +13,9 @@ export default function OrderCta({ className = '' }) {
       <a
         href="#order"
         data-reveal
-        className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3.5 text-base font-bold text-white transition-colors hover:bg-magenta-700"
+        className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3 text-lg font-bold text-white transition-colors hover:bg-magenta-700"
       >
-        <CartIcon width={20} height={20} />
+        <CartIcon width={24} height={24} />
         {tpl(label)}
       </a>
     </div>

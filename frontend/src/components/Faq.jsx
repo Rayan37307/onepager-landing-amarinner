@@ -11,11 +11,11 @@ export default function Faq() {
       <div data-reveal className="mx-auto max-w-2xl divide-y divide-zinc-200 border-y border-zinc-200">
         {faq.items.map((item) => (
           <details key={item.q} className="group py-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-semibold text-zinc-900">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-lg font-semibold text-zinc-900">
               {tpl(item.q)}
               <svg
-                width="16"
-                height="16"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -25,7 +25,7 @@ export default function Faq() {
                 <path d="M12 5v14M5 12h14" />
               </svg>
             </summary>
-            <p className="mt-2 text-sm text-zinc-600">{tpl(item.a)}</p>
+            <p className="mt-2 text-base text-zinc-600">{tpl(item.a)}</p>
           </details>
         ))}
       </div>

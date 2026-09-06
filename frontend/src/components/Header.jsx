@@ -13,18 +13,19 @@ export default function Header() {
           className="h-9 w-auto sm:h-10"
         />
 
-        {/* Two-line delivery note with a truck icon sized to span both lines.
-            The PNG carries its own transparent padding, so a negative margin
-            pulls the text back in tight against the glyph. */}
-        <div className="flex items-center gap-0 text-right">
+        <div className="flex items-center gap-1.5 text-left">
           <img
             src="/delivery (2).png"
             alt=""
             aria-hidden="true"
-            className="-mr-2 h-10 w-10 shrink-0 brightness-0 invert"
+            className="h-7 w-7 shrink-0 brightness-0 invert"
           />
-          <span className="max-w-[9.5rem] text-sm font-semibold leading-tight text-white sm:max-w-[12rem]">
-            {CONTENT.header.codNote}
+          <span className="max-w-[9.5rem] text-xs font-semibold leading-tight text-white sm:max-w-[12rem]">
+            {CONTENT.header.codNote.split('\n').map((line, i) => (
+              <span key={i} className="block whitespace-nowrap">
+                {line}
+              </span>
+            ))}
           </span>
         </div>
       </div>

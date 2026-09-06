@@ -116,8 +116,8 @@ export default function OrderForm() {
 
   return (
     <section id="order" ref={sectionRef} className="border-t border-zinc-200 bg-cream">
-      <div className="mx-auto max-w-lg px-4 py-12 sm:px-6">
-        <h2 data-reveal className="text-2xl font-bold tracking-tight text-zinc-900">
+      <div className="mx-auto max-w-lg px-4 py-8 sm:px-6">
+        <h2 data-reveal className="text-3xl font-bold tracking-tight text-zinc-900">
           {UI.formTitle}
         </h2>
 
@@ -260,7 +260,7 @@ export default function OrderForm() {
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 py-3.5 text-base font-bold text-white transition-colors hover:bg-magenta-700 disabled:opacity-60"
+            className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 py-3 text-lg font-bold text-white transition-colors hover:bg-magenta-700 disabled:opacity-60"
           >
             {status === 'submitting' ? UI.submitting : `${UI.submitIdle} — ${money(total)}`}
           </button>

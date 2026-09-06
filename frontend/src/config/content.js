@@ -5,7 +5,7 @@
 export const CONTENT = {
   // Header
   header: {
-    codNote: 'সারা বাংলাদেশে ক্যাশ অন ডেলিভারি',
+    codNote: 'সারা বাংলাদেশে\nক্যাশ অন ডেলিভারি',
   },
 
   // 1 — Hero
@@ -38,6 +38,7 @@ export const CONTENT = {
   // 3 — Product showcase ("প্রোডাক্ট দেখুন") — image row only, no captions.
   showcase: {
     title: 'প্রোডাক্ট দেখুন',
+    note: 'নোট: Lighting ও স্ক্রিন সেটিংসের কারণে ছবির তুলনায় বাস্তব পণ্যের রঙে সামান্য পার্থক্য দেখা যেতে পারে।',
     images: [
       { src: '/combo-6-colors.webp', alt: '৬ রঙের সম্পূর্ণ কম্বো' },
       { src: '/bra-red.webp', alt: 'সফট ও আরামদায়ক কটন কাপড়' },
@@ -146,7 +147,7 @@ export const CONTENT = {
   // `callLabel` blank to hide just the call button.
   whatsapp: {
     title: 'কোনো প্রশ্ন আছে?',
-    label: 'হোয়াটসঅ্যাপে অর্ডার করুন',
+    label: 'হোয়াটসঅ্যাপে কল করুন',
     callLabel: 'কল করুন',
     note: 'সরাসরি মেসেজ দিন — দ্রুত রিপ্লাই',
     prefill: 'আসসালামু আলাইকুম, আমি {name} অর্ডার করতে চাই।',

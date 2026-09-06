@@ -12,13 +12,13 @@ export default function StickyBar() {
         </div>
         <a
           href="#order"
-          className="btn-shine inline-flex shrink-0 items-center gap-2 rounded-lg bg-magenta-600 px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-magenta-700"
+          className="btn-shine inline-flex shrink-0 items-center gap-2 rounded-lg bg-magenta-600 px-5 py-1.5 text-base font-bold text-white transition-colors hover:bg-magenta-700"
         >
           <img
             src="/online-shopping.png"
             alt=""
             aria-hidden="true"
-            className="h-4 w-4 brightness-0 invert"
+            className="h-5 w-5 brightness-0 invert"
           />
           {CONTENT.ui.stickyCta}
         </a>

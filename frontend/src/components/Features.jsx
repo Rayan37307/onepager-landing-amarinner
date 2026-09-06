@@ -13,10 +13,10 @@ export default function Features() {
       <ul data-reveal className="mx-auto grid max-w-xl gap-3">
         {features.items.map((item) => (
           <li key={item.text} className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-magenta-100 text-magenta-700">
-              <CheckIcon width={14} height={14} />
+            <span className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-magenta-100 text-magenta-700">
+              <CheckIcon width={22} height={22} />
             </span>
-            <span className="text-zinc-800">{tpl(item.text)}</span>
+            <span className="text-xl font-semibold text-zinc-800">{tpl(item.text)}</span>
           </li>
         ))}
       </ul>

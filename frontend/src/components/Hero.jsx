@@ -12,7 +12,7 @@ export default function Hero() {
   const title = `${PRODUCT.name}${PRODUCT.variantTag ? ` — ${PRODUCT.variantTag}` : ''}`;
 
   return (
-    <section className="pb-8">
+    <section className="">
       {/* Full-bleed banner — natural height, nothing overlaid */}
       {bannerMobile ? (
         <picture data-reveal>
@@ -41,13 +41,13 @@ export default function Hero() {
         <a
           href="#order"
           data-reveal
-          className="btn-shine mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3.5 text-base font-bold text-white transition-colors hover:bg-magenta-700"
+          className="btn-shine mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3 text-lg font-bold text-white transition-colors hover:bg-magenta-700"
         >
           <img
             src="/online-shopping.png"
             alt=""
             aria-hidden="true"
-            className="h-5 w-5 brightness-0 invert"
+            className="h-6 w-6 brightness-0 invert"
           />
           {tpl(hero.cta)}
         </a>
