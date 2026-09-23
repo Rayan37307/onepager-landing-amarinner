@@ -12,7 +12,7 @@ export default function StickyBar() {
         </div>
         <a
           href="#order"
-          className="btn-shine inline-flex shrink-0 items-center gap-2 rounded-lg bg-magenta-600 px-5 py-1.5 text-base font-bold text-white transition-colors hover:bg-magenta-700"
+          className="btn-shine inline-flex shrink-0 items-center gap-2 rounded-lg bg-magenta-600 px-4 py-1.5 text-sm font-bold text-white transition-colors hover:bg-magenta-700"
         >
           <img
             src="/online-shopping.png"

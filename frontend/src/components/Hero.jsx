@@ -12,7 +12,7 @@ export default function Hero() {
   const title = `${PRODUCT.name}${PRODUCT.variantTag ? ` — ${PRODUCT.variantTag}` : ''}`;
 
   return (
-    <section className="">
+    <section className="mx-auto max-w-page">
       {/* Full-bleed banner — natural height, nothing overlaid */}
       {bannerMobile ? (
         <picture data-reveal>
@@ -36,18 +36,19 @@ export default function Hero() {
         </div>
       )}
 
-      <div className="mx-auto max-w-md px-4 sm:max-w-lg">
-        {/* Order button — sits directly under the banner */}
+      {/* Order button — on mobile it lifts up over the banner's bottom edge for
+          a floating 3D effect; on desktop it sits normally below. */}
+      <div className="relative z-10 mx-auto -mt-7 max-w-md px-4 sm:mt-4 sm:max-w-lg">
         <a
           href="#order"
           data-reveal
-          className="btn-shine mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3 text-lg font-bold text-white transition-colors hover:bg-magenta-700"
+          className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-magenta-900/30 ring-1 ring-black/5 transition-colors hover:bg-magenta-700 sm:shadow-none sm:ring-0"
         >
           <img
             src="/online-shopping.png"
             alt=""
             aria-hidden="true"
-            className="h-6 w-6 brightness-0 invert"
+            className="h-5 w-5 brightness-0 invert"
           />
           {tpl(hero.cta)}
         </a>

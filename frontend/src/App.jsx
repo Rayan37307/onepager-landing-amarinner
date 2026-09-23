@@ -6,10 +6,9 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductShowcase from './components/ProductShowcase';
 import Features from './components/Features';
-import Countdown from './components/Countdown';
-import ProductVideo from './components/ProductVideo';
 import WhatsApp from './components/WhatsApp';
 import Faq from './components/Faq';
+import Marquee from './components/Marquee';
 import OrderForm from './components/OrderForm';
 import Footer from './components/Footer';
 import StickyBar from './components/StickyBar';
@@ -49,14 +48,16 @@ export default function App() {
   );
 
   return (
-    <div ref={scope} className="mx-auto min-h-screen max-w-page bg-cream pb-16 shadow-sm">
+    <div
+      ref={scope}
+      className="mx-auto min-h-screen max-w-page bg-cream pb-16 shadow-sm lg:max-w-none lg:shadow-none"
+    >
       <Header />
       <Hero />
       <ProductShowcase />
       <Features />
-      <Countdown />
-      <ProductVideo />
       <WhatsApp />
+      <Marquee />
       <OrderForm />
       <Faq />
       <Footer />

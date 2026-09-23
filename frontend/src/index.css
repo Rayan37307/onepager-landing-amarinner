@@ -127,19 +127,13 @@ body {
   }
 }
 
-/* Countdown band: a slow, soft pulse on the maroon card so the offer reads as
-   live and urgent without any jitter. Decorative only — disabled below. */
-.countdown-glow {
-  animation: countdown-pulse 2.4s ease-in-out infinite;
-}
-@keyframes countdown-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 20, 70, 0.35);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(255, 20, 70, 0);
-  }
+/* Dropdown selects — native arrow is removed by `appearance-none`, so draw a
+   quiet chevron on the right edge that scales with the control. */
+.select-chevron {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2352525b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.25rem;
 }
 
 /* Emphasised price — heavier and larger than surrounding text, no marker. */
@@ -149,6 +143,34 @@ body {
   letter-spacing: -0.02em;
 }
 
+/* Infinite auto-scrolling text band. The track holds two identical copies of
+   the content laid side by side; translating it by exactly -50% and looping
+   makes the seam invisible. Pause on hover so it's readable. */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee__track {
+  display: inline-flex;
+  align-items: center;
+  animation: marquee-scroll 45s linear infinite;
+  animation-play-state: paused;
+}
+.marquee.is-running .marquee__track {
+  animation-play-state: running;
+}
+.marquee.is-running:hover .marquee__track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn-shine {
     animation: none;
@@ -156,7 +178,7 @@ body {
   .btn-shine::after {
     display: none;
   }
-  .countdown-glow {
+  .marquee__track {
     animation: none;
   }
 }

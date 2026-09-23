@@ -21,7 +21,7 @@ export default function WhatsApp() {
     <section className="bg-cream">
       <div className="mx-auto max-w-md px-4 py-5 sm:max-w-lg sm:px-6">
         {whatsapp.title && (
-          <p data-reveal className="mb-4 text-center text-lg font-bold text-zinc-900">
+          <p data-reveal className="mb-4 text-center text-xl font-bold tracking-tight text-zinc-900">
             {tpl(whatsapp.title)}
           </p>
         )}
@@ -31,9 +31,9 @@ export default function WhatsApp() {
           target="_blank"
           rel="noopener noreferrer"
           data-reveal
-          className="btn-shine flex items-center justify-center gap-3 rounded-full bg-[#25D366] px-6 py-3.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-[#1ebe5b]"
+          className="btn-shine flex items-center justify-center gap-3 rounded-full bg-[#25D366] px-6 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-[#1ebe5b]"
         >
-          <WhatsAppIcon width={28} height={28} />
+          <WhatsAppIcon width={26} height={26} />
           {tpl(whatsapp.label)}
         </a>
 
@@ -41,9 +41,9 @@ export default function WhatsApp() {
           <a
             href={`tel:${phone}`}
             data-reveal
-            className="btn-shine mt-3 flex items-center justify-center gap-2 rounded-full bg-magenta-600 px-4 py-3.5 text-lg font-bold text-white shadow-sm transition-colors hover:bg-magenta-700 whitespace-nowrap"
+            className="btn-shine mt-3 flex items-center justify-center gap-2 rounded-full bg-magenta-600 px-4 py-3.5 text-base font-bold text-white shadow-sm transition-colors hover:bg-magenta-700 whitespace-nowrap"
           >
-            <span aria-hidden="true" className="shrink-0 leading-none"><PhoneIcon width={26} height={26} /></span>
+            <span aria-hidden="true" className="shrink-0 leading-none"><PhoneIcon width={24} height={24} /></span>
             <span className="whitespace-nowrap">{tpl(whatsapp.callLabel)}: {phone}</span>
           </a>
         )}

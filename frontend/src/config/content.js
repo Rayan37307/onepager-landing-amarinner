@@ -35,19 +35,7 @@ export const CONTENT = {
     ],
   },
 
-  // 2b — Countdown timer band, sits right under "কেন নেবেন?". A rolling,
-  // per-visitor countdown: it starts at `durationHours` on first view and is
-  // remembered in the browser, so every visitor sees a live ticking offer.
-  // Set to null / remove the block to hide the section entirely.
-  countdown: {
-    title: 'অফার শেষ হতে বাকি',
-    subtitle: 'সীমিত সময়ের বিশেষ অফার — সময় শেষ হলে দাম বেড়ে যাবে!',
-    durationHours: 6,
-    labels: { hours: 'ঘণ্টা', minutes: 'মিনিট', seconds: 'সেকেন্ড' },
-    expiredText: 'অফারটি প্রায় শেষ — দ্রুত অর্ডার করুন!',
-  },
-
-  // 3 — Product showcase ("প্রোডাক্ট দেখুন") — image row only, no captions.
+  // 3 — Product showcase ("প্রোডাক্ট দেখুন") — horizontal scroll/carousel row.
   showcase: {
     title: 'প্রোডাক্ট দেখুন',
     note: 'নোট: Lighting ও স্ক্রিন সেটিংসের কারণে ছবির তুলনায় বাস্তব পণ্যের রঙে সামান্য পার্থক্য দেখা যেতে পারে।',
@@ -57,15 +45,10 @@ export const CONTENT = {
       { src: '/bra-detail.webp', alt: 'অরিজিনাল GUDDI ব্র্যান্ড' },
       { src: '/bra-black.webp', alt: 'মজবুত সেলাই ও ফিনিশিং' },
       { src: '/bra-pink.webp', alt: 'দৈনন্দিন ব্যবহারের জন্য পারফেক্ট' },
+      { src: '/bra-nude.webp', alt: 'নুড রঙ' },
+      { src: '/bra-skin.webp', alt: 'স্কিন রঙ' },
+      { src: '/bra-beige.webp', alt: 'বেইজ রঙ' },
     ],
-  },
-
-  // 3b — Product video. Set `url` to a YouTube/Facebook/MP4 link to embed it;
-  // while empty the section shows a titled placeholder box.
-  video: {
-    title: 'প্রোডাক্টের ভিডিও দেখুন',
-    url: '',
-    placeholder: 'এখানে প্রোডাক্ট ভিডিও থাকবে',
   },
 
   // 4 — Size picker ("আপনার সাইজ বেছে নিন")
@@ -201,7 +184,8 @@ export const CONTENT = {
     freeDelivery: 'ফ্রি',
     totalLabel: 'মোট',
     codLabel: 'ক্যাশ অন ডেলিভারি',
-    codNote: 'ডেলিভারির সময় ক্যাশ দিয়ে মূল্য পরিশোধ করুন।',
+    phoneNote: 'এই নাম্বারে কল করে অর্ডার নিশ্চিত করা হবে।',
+    orderNote: 'অর্ডার করার পর ফোন করে নিশ্চিত করা হবে।',
     privacyNote:
       'আপনার তথ্য শুধুমাত্র অর্ডার প্রসেস করতে এবং আপনার অভিজ্ঞতা আরও ভালো করতে ব্যবহৃত হবে।',
     secureNote: 'আপনার তথ্য সম্পূর্ণ নিরাপদ',

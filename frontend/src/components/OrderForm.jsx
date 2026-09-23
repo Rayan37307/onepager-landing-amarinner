@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { PRODUCT } from '../config/product';
 import { CONTENT } from '../config/content';
-import { money, bnDigits } from '../lib/text';
+import { money, bnDigits, bnNum } from '../lib/text';
 import { getAttribution } from '../lib/attribution';
 import { trackInitiateCheckout, trackPurchase } from '../lib/pixel';
 import { submitOrder, ApiError } from '../lib/api';
@@ -11,6 +11,7 @@ const UI = CONTENT.ui;
 const SIZES = PRODUCT.sizes ?? [];
 const COLORS = PRODUCT.colors ?? [];
 const SHIP = PRODUCT.shipping ?? null;
+const DISTRICTS = SHIP?.divisions?.flatMap((d) => d.districts) ?? [];
 
 // Resolve a district name to its fee tier: Dhaka city → dhaka, the adjacent
 // belt → suburb, everything else → normal.
@@ -108,7 +109,7 @@ export default function OrderForm() {
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
           <CheckIcon width={24} height={24} />
         </span>
-        <h2 className="mt-4 text-xl font-bold text-zinc-900">{UI.successTitle}</h2>
+        <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-900">{UI.successTitle}</h2>
         <p className="mt-2 text-zinc-600">{UI.successBody.replace('#{order}', `#${orderNumber}`)}</p>
       </section>
     );
@@ -117,42 +118,28 @@ export default function OrderForm() {
   return (
     <section id="order" ref={sectionRef} className="border-t border-zinc-200 bg-cream">
       <div className="mx-auto max-w-lg px-4 py-8 sm:px-6">
-        <h2 data-reveal className="text-3xl font-bold tracking-tight text-zinc-900">
+        <h2 data-reveal className="text-xl font-bold tracking-tight text-zinc-900">
           {UI.formTitle}
         </h2>
-
-        {/* What you're ordering */}
-        <div data-reveal className="mt-5 flex items-center gap-3 border-y border-zinc-200 py-3">
-          <ProductThumb image={selectedImage} />
-          <span className="flex-1 text-sm font-semibold text-zinc-900">{productTitle}</span>
-          <span className="price-hl text-sm font-bold text-zinc-900">{money(unitPrice)}</span>
-        </div>
 
         <form onSubmit={handleSubmit} data-reveal className="mt-6 space-y-6">
           {SIZES.length > 0 && (
             <fieldset>
               <legend className="text-sm font-semibold text-zinc-900">{UI.sizeFieldLabel}</legend>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {SIZES.map((s) => {
-                  const delta = s.price - PRODUCT.price;
-                  return (
-                    <button
-                      type="button"
-                      key={s.label}
-                      onClick={() => setSize(s.label)}
-                      aria-pressed={size === s.label}
-                      className={`min-w-[3rem] rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                        size === s.label
-                          ? 'border-magenta-600 bg-magenta-600 text-white'
-                          : 'border-zinc-300 text-zinc-800 hover:border-zinc-400'
-                      }`}
-                    >
-                      {bnDigits(s.label)}
-                      {delta > 0 && ` (+${money(delta)})`}
-                    </button>
-                  );
-                })}
-              </div>
+              <label className="mt-2 block">
+                <span className="sr-only">{UI.sizeLabel}</span>
+                <select
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                  className={`${inputClass} select-chevron appearance-none bg-white`}
+                >
+                  {SIZES.map((s) => (
+                    <option key={s.label} value={s.label}>
+                      {bnDigits(s.label)} — {bnNum(s.price)} টাকা
+                    </option>
+                  ))}
+                </select>
+              </label>
               <FieldError error={errors.variant} />
             </fieldset>
           )}
@@ -186,7 +173,7 @@ export default function OrderForm() {
             </fieldset>
           )}
 
-          {SHIP?.divisions?.length > 0 && (
+          {DISTRICTS.length > 0 && (
             <fieldset>
               <legend className="text-sm font-semibold text-zinc-900">{UI.shippingTitle}</legend>
               <label className="mt-2 block">
@@ -197,20 +184,19 @@ export default function OrderForm() {
                   required
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
-                  className={`${inputClass} appearance-none bg-white`}
+                  className={`${inputClass} select-chevron appearance-none bg-white`}
                 >
                   <option value="" disabled>
                     {UI.zonePlaceholder}
                   </option>
-                  {SHIP.divisions.map((div) => (
-                    <optgroup key={div.name} label={div.name}>
-                      {div.districts.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
+                  {DISTRICTS.map((d) => {
+                    const t = resolveTier(d);
+                    return (
+                      <option key={d} value={d}>
+                        {t === SHIP.tiers.suburb ? `${d} (${t.label})` : d}
+                      </option>
+                    );
+                  })}
                 </select>
               </label>
               {tier && (
@@ -231,14 +217,19 @@ export default function OrderForm() {
               placeholder={UI.namePlaceholder}
               error={errors.customer_name}
             />
-            <Input
-              label={UI.phoneLabel}
-              type="tel"
-              value={form.phone}
-              onChange={updateField('phone')}
-              placeholder={UI.phonePlaceholder}
-              error={errors.customer_phone}
-            />
+            <div>
+              <Input
+                label={UI.phoneLabel}
+                type="tel"
+                value={form.phone}
+                onChange={updateField('phone')}
+                placeholder={UI.phonePlaceholder}
+                error={errors.customer_phone}
+              />
+              {UI.phoneNote && (
+                <p className="-mt-2 text-xs font-medium text-zinc-500">{UI.phoneNote}</p>
+              )}
+            </div>
             <Input
               label={UI.addressLabel}
               value={form.address}
@@ -248,9 +239,25 @@ export default function OrderForm() {
             />
           </div>
 
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-4 text-base font-bold text-zinc-900">
-            <span>{UI.totalLabel}</span>
-            <span className="price-hl">{money(total)}</span>
+          <div className="border-t border-zinc-200 pt-4">
+            {/* What you're ordering — lives with the order summary, right above the total */}
+            <div className="flex items-center gap-3 pb-3">
+              <ProductThumb image={selectedImage} />
+              <span className="flex-1 text-sm font-semibold text-zinc-900">{productTitle}</span>
+              <span className="price-hl text-sm font-bold text-zinc-900">{money(unitPrice)}</span>
+            </div>
+            <div className="flex items-center justify-between text-sm text-zinc-600">
+              <span>{UI.subtotalLabel}</span>
+              <span>{money(unitPrice * quantity)}</span>
+            </div>
+            <div className="mt-1 flex items-center justify-between text-sm text-zinc-600">
+              <span>{UI.deliveryLabel}{tier ? ` · ${tier.label}` : ''}</span>
+              <span>{tier ? `+ ${money(shippingFee)}` : '—'}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-2 text-base font-bold text-zinc-900">
+              <span>{UI.totalLabel}</span>
+              <span className="price-hl">{money(total)}</span>
+            </div>
           </div>
 
           {status === 'error' && Object.keys(errors).length === 0 && (
@@ -260,12 +267,12 @@ export default function OrderForm() {
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 py-3 text-lg font-bold text-white transition-colors hover:bg-magenta-700 disabled:opacity-60"
+            className="btn-shine flex w-full items-center justify-center gap-2 rounded-xl bg-magenta-600 py-3 text-sm font-bold text-white transition-colors hover:bg-magenta-700 disabled:opacity-60"
           >
             {status === 'submitting' ? UI.submitting : `${UI.submitIdle} — ${money(total)}`}
           </button>
 
-          <p className="text-center text-xs text-zinc-500">{UI.codNote}</p>
+          <p className="text-center text-xs font-medium text-zinc-500">{UI.orderNote}</p>
         </form>
       </div>
     </section>

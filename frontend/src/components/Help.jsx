@@ -10,7 +10,7 @@ export default function Help() {
   return (
     <section className="border-t border-zinc-200 bg-cream">
       <div className="mx-auto max-w-page px-4 py-10 text-center sm:px-6">
-        <p data-reveal className="text-lg font-bold text-zinc-900">{help.title}</p>
+        <p data-reveal className="text-xl font-bold tracking-tight text-zinc-900">{help.title}</p>
         {help.body && (
           <p data-reveal className="mx-auto mt-2 max-w-md text-sm text-zinc-600">
             {help.body}

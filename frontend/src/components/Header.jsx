@@ -6,7 +6,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-magenta-700 text-white">
-      <div className="mx-auto flex max-w-page items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-page items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:max-w-none lg:px-10">
         <img
           src="/Amar Inner logo-v1 (3).png"
           alt={`${brand.name} (${brand.nameEn})`}
