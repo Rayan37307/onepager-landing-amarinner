@@ -37,8 +37,20 @@ export default function ProductShowcase() {
     const onScroll = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        const i = Math.round(el.scrollLeft / el.clientWidth);
-        setActive(Math.max(0, Math.min(images.length - 1, i)));
+        // Slides are full-width on phones but ~1/3.5 of the track on desktop, so
+        // find the snapped slide by position instead of dividing by track width.
+        const atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 1;
+        if (atEnd) return setActive(images.length - 1);
+        let i = 0;
+        let best = Infinity;
+        for (let k = 0; k < el.children.length; k += 1) {
+          const d = Math.abs(el.children[k].offsetLeft - el.scrollLeft);
+          if (d < best) {
+            best = d;
+            i = k;
+          }
+        }
+        setActive(i);
       });
     };
     el.addEventListener('scroll', onScroll, { passive: true });
@@ -91,7 +103,8 @@ export default function ProductShowcase() {
     const el = trackRef.current;
     if (!el) return;
     const next = (i + images.length) % images.length;
-    el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' });
+    const slide = el.children[next];
+    el.scrollTo({ left: slide ? slide.offsetLeft : 0, behavior: 'smooth' });
     setActive(next);
   };
 
@@ -104,27 +117,32 @@ export default function ProductShowcase() {
     <>
       <Section title={showcase.title}>
         <div data-reveal>
-          <div className="relative overflow-hidden rounded-3xl bg-zinc-100">
+          <div className="relative overflow-hidden rounded-3xl bg-zinc-100 md:rounded-none md:bg-transparent">
             <div
               ref={trackRef}
-              className="no-scrollbar flex aspect-square snap-x snap-mandatory overflow-x-auto"
+              className="no-scrollbar flex aspect-square snap-x snap-mandatory overflow-x-auto md:aspect-auto"
             >
               {images.map((img, i) => (
-                <div key={img.src ?? i} className="h-full w-full shrink-0 snap-center">
-                  {img?.src ? (
-                    <img
-                      src={img.src}
-                      alt={img.alt ?? ''}
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                      draggable={false}
-                      onClick={() => setZoomIndex(i)}
-                      className="h-full w-full cursor-zoom-in object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-zinc-300">
-                      <BraIcon width={64} height={64} />
-                    </div>
-                  )}
+                <div
+                  key={img.src ?? i}
+                  className="h-full w-full shrink-0 snap-center md:h-auto md:w-[40%] md:snap-start md:px-2"
+                >
+                  <div className="h-full w-full overflow-hidden bg-zinc-100 md:aspect-square md:rounded-3xl">
+                    {img?.src ? (
+                      <img
+                        src={img.src}
+                        alt={img.alt ?? ''}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        draggable={false}
+                        onClick={() => setZoomIndex(i)}
+                        className="h-full w-full cursor-zoom-in object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-zinc-300">
+                        <BraIcon width={64} height={64} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -135,7 +153,7 @@ export default function ProductShowcase() {
                   type="button"
                   onClick={() => goTo(active - 1)}
                   aria-label="Previous image"
-                  className={`${roundBtn} absolute left-4 top-1/2 -translate-y-1/2 bg-black/85 text-white hover:bg-black`}
+                  className={`${roundBtn} absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/85 md:left-6 text-white hover:bg-black`}
                 >
                   <ChevronLeft />
                 </button>
@@ -143,7 +161,7 @@ export default function ProductShowcase() {
                   type="button"
                   onClick={() => goTo(active + 1)}
                   aria-label="Next image"
-                  className={`${roundBtn} absolute right-4 top-1/2 -translate-y-1/2 bg-black/85 text-white hover:bg-black`}
+                  className={`${roundBtn} absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/85 md:right-6 text-white hover:bg-black`}
                 >
                   <ChevronRight />
                 </button>
@@ -154,7 +172,7 @@ export default function ProductShowcase() {
               type="button"
               onClick={() => setZoomIndex(active)}
               aria-label="Zoom image"
-              className={`${roundBtn} absolute bottom-4 right-4 bg-white text-zinc-900 hover:bg-zinc-50`}
+              className={`${roundBtn} absolute bottom-4 right-4 bg-white text-zinc-900 hover:bg-zinc-50 md:hidden`}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="7" />
@@ -163,14 +181,14 @@ export default function ProductShowcase() {
             </button>
 
             {images.length > 1 && (
-              <span className="absolute bottom-5 left-4 rounded-full bg-black/55 px-3 py-0.5 text-xs text-white">
+              <span className="absolute bottom-5 left-4 rounded-full bg-black/55 px-3 py-0.5 text-xs text-white md:hidden">
                 {active + 1} / {images.length}
               </span>
             )}
           </div>
 
           {images.length > 1 && (
-            <div ref={thumbsRef} className="no-scrollbar mt-4 flex gap-3 overflow-x-auto p-1">
+            <div ref={thumbsRef} className="no-scrollbar mt-4 flex gap-3 overflow-x-auto p-1 md:hidden">
               {images.map((img, i) => (
                 <button
                   key={img.src ?? i}
