@@ -1,8 +1,7 @@
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
-import { money } from '../lib/text';
+import { usePage } from '../lib/page';
 
 export default function StickyBar() {
+  const { PRODUCT, CONTENT, money } = usePage();
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200 bg-white">
       <div className="mx-auto flex max-w-page items-center justify-between gap-3 px-4 py-2.5 sm:px-6">

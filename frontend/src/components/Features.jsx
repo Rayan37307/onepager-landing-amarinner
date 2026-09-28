@@ -1,10 +1,10 @@
-import { CONTENT } from '../config/content';
-import { tpl } from '../lib/text';
 import Section from './Section';
 import OrderCta from './OrderCta';
 import { CheckIcon } from './icons';
+import { usePage } from '../lib/page';
 
 export default function Features() {
+  const { CONTENT, tpl } = usePage();
   const { features } = CONTENT;
   if (!features?.items?.length) return null;
 

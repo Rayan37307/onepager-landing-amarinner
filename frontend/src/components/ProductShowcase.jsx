@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { CONTENT } from '../config/content';
 import Section from './Section';
 import OrderCta from './OrderCta';
 import { BraIcon } from './icons';
+import { usePage } from '../lib/page';
 
 const ChevronLeft = ({ size = 22 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -19,6 +19,7 @@ const ChevronRight = ({ size = 22 }) => (
 );
 
 export default function ProductShowcase() {
+  const { CONTENT } = usePage();
   const { showcase } = CONTENT;
   const images = showcase?.images ?? [];
   const trackRef = useRef(null);

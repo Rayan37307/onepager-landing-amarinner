@@ -67,6 +67,38 @@ class OrderApiTest extends TestCase
         $this->assertSame(2220.0, (float) $order->total);
     }
 
+    public function test_it_stores_ad_hierarchy_and_visit_details(): void
+    {
+        $this->postJson('/api/orders', [
+            'customer_name' => 'Nadia',
+            'customer_phone' => '01722222222',
+            'product_name' => 'Comfort Bra',
+            'quantity' => 1,
+            'unit_price' => 975,
+            'district' => 'গাজীপুর',
+            'fb_campaign_id' => '120200000001',
+            'fb_adset_id' => '120200000002',
+            'fb_ad_id' => '120200000003',
+            'adset_name' => 'Women 18-35 BD',
+            'ad_name' => 'Hook — comfort all day',
+            'placement' => 'Facebook_Mobile_Feed',
+            'landing_page' => 'https://example.com/guddi-bra?utm_source=facebook',
+            'referrer' => 'https://m.facebook.com/',
+            'session_id' => 'sess-1',
+            'time_to_order_seconds' => 184,
+        ], ['User-Agent' => 'Mozilla/5.0 (Linux; Android 14; SM-A546E) AppleWebKit/537.36 Chrome/128.0 Mobile Safari/537.36 [FBAN/EMA;FBAV/400.0]'])
+            ->assertCreated();
+
+        $order = Order::first();
+        $this->assertSame('গাজীপুর', $order->district);
+        $this->assertSame('120200000003', $order->fb_ad_id);
+        $this->assertSame('Women 18-35 BD', $order->adset_name);
+        $this->assertSame('Facebook_Mobile_Feed', $order->placement);
+        $this->assertSame('sess-1', $order->session_id);
+        $this->assertSame(184, $order->time_to_order_seconds);
+        $this->assertSame('Facebook', $order->trafficSource());
+    }
+
     public function test_it_stores_the_meta_pixel_fbc_cookie(): void
     {
         $this->postJson('/api/orders', [

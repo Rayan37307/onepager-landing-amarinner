@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
@@ -24,6 +25,7 @@ class Order extends Model
         'total',
         'shipping_zone',
         'shipping_fee',
+        'district',
         'status',
         'campaign_id',
         'ad_identifier',
@@ -35,6 +37,16 @@ class Order extends Model
         'fbclid',
         'fbp',
         'fbc',
+        'fb_campaign_id',
+        'fb_adset_id',
+        'fb_ad_id',
+        'adset_name',
+        'ad_name',
+        'placement',
+        'landing_page',
+        'referrer',
+        'session_id',
+        'time_to_order_seconds',
         'ip_address',
         'user_agent',
         'capi_sent_at',
@@ -50,6 +62,7 @@ class Order extends Model
         'shipping_fee' => 'decimal:2',
         'capi_sent_at' => 'datetime',
         'capi_response' => 'array',
+        'time_to_order_seconds' => 'integer',
     ];
 
     protected static function booted(): void
@@ -110,6 +123,51 @@ class Order extends Model
             'user_id' => $userId,
             'changed_at' => now(),
         ]);
+    }
+
+    /**
+     * Where the order came from: Facebook (any Meta click id or a
+     * facebook/instagram UTM source), Direct (no UTM source and no referrer)
+     * or Other.
+     */
+    public function trafficSource(): string
+    {
+        $source = Str::lower((string) $this->utm_source);
+
+        if ($this->fbclid || $this->fbc || $this->fb_ad_id
+            || Str::contains($source, ['facebook', 'instagram'])
+            || in_array($source, ['fb', 'ig', 'meta', 'an', 'msg'], true)) {
+            return 'Facebook';
+        }
+
+        if (blank($this->utm_source) && blank($this->referrer)) {
+            return 'Direct';
+        }
+
+        return 'Other';
+    }
+
+    /**
+     * Other orders in the same scope (same session / IP), not counting this one.
+     */
+    public function siblingOrdersCount(string $column): int
+    {
+        if (blank($this->{$column})) {
+            return 0;
+        }
+
+        return static::query()
+            ->where($column, $this->{$column})
+            ->whereKeyNot($this->getKey())
+            ->count();
+    }
+
+    /**
+     * When the order first reached the given status, from the history trail.
+     */
+    public function reachedStatusAt(OrderStatus $status): ?Carbon
+    {
+        return $this->statusHistories->firstWhere('status', $status)?->changed_at;
     }
 
     public function scopeToday($query)

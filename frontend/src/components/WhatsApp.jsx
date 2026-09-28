@@ -1,13 +1,12 @@
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
-import { tpl } from '../lib/text';
 import { PhoneIcon, WhatsAppIcon } from './icons';
+import { usePage } from '../lib/page';
 
 // Standalone contact block — a wide green WhatsApp pill and, under it, a matching
 // magenta call pill showing the phone number. Renders nothing without a
 // WhatsApp number or label; the call pill hides on its own without a phone
 // number or `callLabel`.
 export default function WhatsApp() {
+  const { PRODUCT, CONTENT, tpl } = usePage();
   const { whatsapp } = CONTENT;
   const number = PRODUCT.contact?.whatsapp;
   const phone = PRODUCT.contact?.phone;

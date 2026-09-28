@@ -12,7 +12,26 @@ const TRACKED_PARAMS = [
   'utm_term',
   'fbclid',
   'campaign', // manual override, e.g. ?campaign=Summer%20Offer
+  // Meta ad hierarchy — add these to the ad's URL parameters:
+  //   campaign_id={{campaign.id}}&adset_id={{adset.id}}&ad_id={{ad.id}}
+  //   &adset_name={{adset.name}}&ad_name={{ad.name}}&placement={{placement}}
+  'adset_name',
+  'ad_name',
+  'placement',
 ];
+
+// URL params renamed on the way to the backend, where `campaign_id` is already
+// the local campaign foreign key.
+const RENAMED_PARAMS = {
+  campaign_id: 'fb_campaign_id',
+  adset_id: 'fb_adset_id',
+  ad_id: 'fb_ad_id',
+};
+
+function newSessionId() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
 
 function readCookie(name) {
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -25,6 +44,10 @@ function captureFromUrl() {
 
   for (const key of TRACKED_PARAMS) {
     const value = params.get(key);
+    if (value) captured[key] = value;
+  }
+  for (const [param, key] of Object.entries(RENAMED_PARAMS)) {
+    const value = params.get(param);
     if (value) captured[key] = value;
   }
 
@@ -45,7 +68,16 @@ export function captureAttribution() {
   }
 
   const fromUrl = captureFromUrl();
-  const merged = { ...fromUrl, ...stored };
+  // Visit details are first-touch too: the page they landed on, where they
+  // came from, a per-tab session id and when they arrived (for "time spent
+  // before order").
+  const visit = {
+    landing_page: window.location.href,
+    referrer: document.referrer || undefined,
+    session_id: newSessionId(),
+    landed_at: Date.now(),
+  };
+  const merged = { ...visit, ...fromUrl, ...stored };
 
   try {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
@@ -68,8 +100,11 @@ export function getAttribution() {
     stored = {};
   }
 
+  const { landed_at: landedAt, ...rest } = stored;
+
   return {
-    ...stored,
+    ...rest,
+    time_to_order_seconds: landedAt ? Math.max(0, Math.round((Date.now() - landedAt) / 1000)) : undefined,
     // Meta Pixel first-party cookies — present once the pixel has loaded.
     // fbc is the click id (from fbclid); the backend falls back to
     // reconstructing it from the raw fbclid when this cookie is absent.

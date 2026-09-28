@@ -61,22 +61,22 @@ export function track(event, params = {}, eventID) {
 }
 
 /** Someone viewed the product (fire once on landing). */
-export function trackViewContent() {
+export function trackViewContent(product = PRODUCT) {
   track('ViewContent', {
-    content_name: PRODUCT.name,
+    content_name: product.name,
     content_type: 'product',
     currency: CURRENCY,
-    value: PRODUCT.price,
+    value: product.price,
   });
 }
 
 /** Someone reached / engaged the order form. */
-export function trackInitiateCheckout(value = PRODUCT.price) {
+export function trackInitiateCheckout(product = PRODUCT) {
   track('InitiateCheckout', {
-    content_name: PRODUCT.name,
+    content_name: product.name,
     content_type: 'product',
     currency: CURRENCY,
-    value,
+    value: product.price,
     num_items: 1,
   });
 }

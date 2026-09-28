@@ -17,7 +17,7 @@ enum OrderStatus: string
             self::New => 'New',
             self::Called => 'Called',
             self::Confirmed => 'Confirmed',
-            self::Shipped => 'Shipped',
+            self::Shipped => 'Dispatched',
             self::Delivered => 'Delivered',
             self::Cancelled => 'Cancelled',
         };

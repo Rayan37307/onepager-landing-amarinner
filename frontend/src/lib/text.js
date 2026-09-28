@@ -12,14 +12,14 @@ export function bnDigits(str) {
 }
 
 // Price with the configured currency symbol, e.g. "৳৯৯৯".
-export function money(n) {
-  return `${PRODUCT.currency}${bnNum(n)}`;
+export function money(n, product = PRODUCT) {
+  return `${product.currency}${bnNum(n)}`;
 }
 
 // Replace `{name}` / `{price}` tokens in content strings.
-export function tpl(str) {
+export function tpl(str, product = PRODUCT) {
   if (typeof str !== 'string') return str;
   return str
-    .replaceAll('{name}', PRODUCT.name)
-    .replaceAll('{price}', bnNum(PRODUCT.price));
+    .replaceAll('{name}', product.name)
+    .replaceAll('{price}', bnNum(product.price));
 }

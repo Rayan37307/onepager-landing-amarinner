@@ -1,9 +1,8 @@
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
-import { tpl } from '../lib/text';
 import { BraIcon } from './icons';
+import { usePage } from '../lib/page';
 
 export default function Hero() {
+  const { PRODUCT, CONTENT, tpl } = usePage();
   const { hero } = CONTENT;
   const banner = PRODUCT.heroBanner;
   const bannerMobile = banner?.mobile ?? banner?.desktop;

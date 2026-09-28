@@ -1,7 +1,6 @@
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
 import { bnDigits } from '../lib/text';
 import { FacebookIcon, InstagramIcon, TiktokIcon, WhatsAppIcon } from './icons';
+import { usePage } from '../lib/page';
 
 const SOCIAL_LINKS = [
   { key: 'facebook', Icon: FacebookIcon, label: 'Facebook' },
@@ -11,6 +10,7 @@ const SOCIAL_LINKS = [
 ];
 
 export default function Footer() {
+  const { PRODUCT, CONTENT } = usePage();
   const social = PRODUCT.social ?? {};
 
   return (

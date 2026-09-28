@@ -1,8 +1,8 @@
-import { CONTENT } from '../config/content';
-import { tpl } from '../lib/text';
 import Section from './Section';
+import { usePage } from '../lib/page';
 
 export default function Faq() {
+  const { CONTENT, tpl } = usePage();
   const { faq } = CONTENT;
   if (!faq?.items?.length) return null;
 

@@ -1,10 +1,10 @@
-import { CONTENT } from '../config/content';
-import { tpl } from '../lib/text';
 import { CartIcon } from './icons';
+import { usePage } from '../lib/page';
 
 // Repeated "jump to the order form" button, dropped between sections. Renders
 // nothing when CONTENT.inlineCta is blank.
 export default function OrderCta({ className = '' }) {
+  const { CONTENT, tpl } = usePage();
   const label = CONTENT.inlineCta;
   if (!label) return null;
 

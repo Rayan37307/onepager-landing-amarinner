@@ -1,28 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
-import { money, bnDigits, bnNum } from '../lib/text';
+import { bnDigits, bnNum } from '../lib/text';
+import { usePage } from '../lib/page';
 import { getAttribution } from '../lib/attribution';
 import { trackInitiateCheckout, trackPurchase } from '../lib/pixel';
 import { submitOrder, ApiError } from '../lib/api';
 import { BraIcon, CheckIcon } from './icons';
 
-const UI = CONTENT.ui;
-const SIZES = PRODUCT.sizes ?? [];
-const COLORS = PRODUCT.colors ?? [];
-const SHIP = PRODUCT.shipping ?? null;
-const DISTRICTS = SHIP?.divisions?.flatMap((d) => d.districts) ?? [];
-
 // Resolve a district name to its fee tier: Dhaka city → dhaka, the adjacent
 // belt → suburb, everything else → normal.
-function resolveTier(district) {
-  if (!SHIP || !district) return null;
-  if (district === SHIP.dhakaDistrict) return SHIP.tiers.dhaka;
-  if (SHIP.suburbDistricts?.includes(district)) return SHIP.tiers.suburb;
-  return SHIP.tiers.normal;
+function resolveTier(ship, district) {
+  if (!ship || !district) return null;
+  if (district === ship.dhakaDistrict) return ship.tiers.dhaka;
+  if (ship.suburbDistricts?.includes(district)) return ship.tiers.suburb;
+  return ship.tiers.normal;
 }
 
 export default function OrderForm() {
+  const { PRODUCT, CONTENT, money } = usePage();
+  const UI = CONTENT.ui;
+  const SIZES = PRODUCT.sizes ?? [];
+  const COLORS = PRODUCT.colors ?? [];
+  const SHIP = PRODUCT.shipping ?? null;
+  const DISTRICTS = SHIP?.divisions?.flatMap((d) => d.districts) ?? [];
+
   const [size, setSize] = useState(SIZES[0]?.label ?? '');
   const [color, setColor] = useState(COLORS[0]?.label ?? null);
   const [district, setDistrict] = useState('');
@@ -41,7 +41,7 @@ export default function OrderForm() {
       (entries) => {
         if (entries.some((e) => e.isIntersecting) && !checkoutTracked.current) {
           checkoutTracked.current = true;
-          trackInitiateCheckout();
+          trackInitiateCheckout(PRODUCT);
           observer.disconnect();
         }
       },
@@ -49,13 +49,14 @@ export default function OrderForm() {
     );
     observer.observe(el);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once per mount
   }, []);
 
   const quantity = 1;
   const unitPrice = SIZES.length
     ? (SIZES.find((s) => s.label === size)?.price ?? PRODUCT.price)
     : PRODUCT.price;
-  const tier = resolveTier(district);
+  const tier = resolveTier(SHIP, district);
   const shippingFee = tier?.fee ?? 0;
   const total = unitPrice * quantity + shippingFee;
 
@@ -80,6 +81,7 @@ export default function OrderForm() {
         variant: size || null,
         color,
         shipping_zone: district ? `${district}${tier ? ` — ${tier.label}` : ''}` : null,
+        district: district || null,
         shipping_fee: shippingFee,
         ...attribution,
       });
@@ -190,7 +192,7 @@ export default function OrderForm() {
                     {UI.zonePlaceholder}
                   </option>
                   {DISTRICTS.map((d) => {
-                    const t = resolveTier(d);
+                    const t = resolveTier(SHIP, d);
                     return (
                       <option key={d} value={d}>
                         {t === SHIP.tiers.suburb ? `${d} (${t.label})` : d}
@@ -227,7 +229,7 @@ export default function OrderForm() {
                 error={errors.customer_phone}
               />
               {UI.phoneNote && (
-                <p className="-mt-2 text-xs font-medium text-zinc-500">{UI.phoneNote}</p>
+                <p className="mt-1.5 text-xs font-medium text-zinc-500">{UI.phoneNote}</p>
               )}
             </div>
             <Input

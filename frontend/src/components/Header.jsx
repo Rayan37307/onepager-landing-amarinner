@@ -1,7 +1,7 @@
-import { PRODUCT } from '../config/product';
-import { CONTENT } from '../config/content';
+import { usePage } from '../lib/page';
 
 export default function Header() {
+  const { PRODUCT, CONTENT } = usePage();
   const { brand } = PRODUCT;
 
   return (

@@ -1,4 +1,4 @@
-import { tpl } from '../lib/text';
+import { usePage } from '../lib/page';
 
 // One restrained accent (rose) — kept minimal and used sparingly.
 const ACCENT = {
@@ -24,6 +24,7 @@ export function SectionHeading({ children }) {
 }
 
 export default function Section({ id, title, subtitle, children, wide = false }) {
+  const { tpl } = usePage();
   return (
     <section id={id} className="bg-cream">
       <div
