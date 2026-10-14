@@ -4,7 +4,7 @@ import { usePage } from '../lib/page';
 import { getAttribution } from '../lib/attribution';
 import { trackInitiateCheckout, trackPurchase } from '../lib/pixel';
 import { submitOrder, ApiError } from '../lib/api';
-import { BraIcon, CheckIcon } from './icons';
+import { BraIcon, CheckIcon, CloseIcon } from './icons';
 
 // Resolve a district name to its fee tier: Dhaka city → dhaka, the adjacent
 // belt → suburb, everything else → normal.
@@ -52,6 +52,29 @@ export default function OrderForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once per mount
   }, []);
 
+  // Lock body scroll + close on Escape while the success dialog is open.
+  useEffect(() => {
+    if (status !== 'success') return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setStatus('idle');
+        setOrderNumber(null);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [status]);
+
+  function closeSuccess() {
+    setStatus('idle');
+    setOrderNumber(null);
+  }
+
   const quantity = 1;
   const unitPrice = SIZES.length
     ? (SIZES.find((s) => s.label === size)?.price ?? PRODUCT.price)
@@ -87,15 +110,21 @@ export default function OrderForm() {
       });
 
       setOrderNumber(result.order_number);
-      setStatus('success');
 
       // Browser-side Purchase — deduped against the server-side CAPI event by
-      // the shared event_id the backend returns.
-      trackPurchase({
-        value: total,
-        eventID: result.event_id,
-        contentName: `${PRODUCT.name}${PRODUCT.variantTag ? ` ${PRODUCT.variantTag}` : ''}`,
-      });
+      // the shared event_id the backend returns. Fire BEFORE flipping to the
+      // success screen so the fbq queue push can't be lost on unmount.
+      try {
+        trackPurchase({
+          value: Number(total) || 0,
+          eventID: result.event_id,
+          contentName: `${PRODUCT.name}${PRODUCT.variantTag ? ` ${PRODUCT.variantTag}` : ''}`,
+        });
+      } catch {
+        // Never let a pixel hiccup break the success UI.
+      }
+
+      setStatus('success');
     } catch (err) {
       setStatus('error');
       if (err instanceof ApiError) setErrors(err.errors);
@@ -107,13 +136,37 @@ export default function OrderForm() {
 
   if (status === 'success') {
     return (
-      <section id="order" className="mx-auto max-w-lg px-4 py-16 text-center sm:px-6">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-          <CheckIcon width={24} height={24} />
-        </span>
-        <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-900">{UI.successTitle}</h2>
-        <p className="mt-2 text-zinc-600">{UI.successBody.replace('#{order}', `#${orderNumber}`)}</p>
-      </section>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={UI.successTitle}
+        className="fixed inset-0 z-[100] flex flex-col bg-white"
+      >
+        <button
+          type="button"
+          onClick={closeSuccess}
+          aria-label="Close"
+          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:bg-zinc-100"
+        >
+          <CloseIcon width={20} height={20} />
+        </button>
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-16 sm:px-6">
+          <div className="mx-auto max-w-lg text-center">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <CheckIcon width={24} height={24} />
+            </span>
+            <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-900">{UI.successTitle}</h2>
+            <p className="mt-2 text-zinc-600">{UI.successBody.replace('#{order}', `#${orderNumber}`)}</p>
+            <button
+              type="button"
+              onClick={closeSuccess}
+              className="mt-6 rounded-xl border border-zinc-300 px-6 py-2.5 text-sm font-bold text-zinc-800 transition hover:bg-zinc-100"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
     );
   }
 

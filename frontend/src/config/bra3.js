@@ -1,4 +1,4 @@
-// /bra3 — Premium Strapless Padded Bra, 4-piece combo. Starts from the default
+// /premium-strapless-padded-bra — Premium Strapless Padded Bra, 4-piece combo. Starts from the default
 // product/content (brand, contact, districts, UI strings) and overrides only
 // what differs for this product.
 import { PRODUCT } from './product';

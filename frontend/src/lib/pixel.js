@@ -12,7 +12,25 @@
 import { PRODUCT } from '../config/product';
 
 const PIXEL_ID = PRODUCT.tracking?.metaPixelId || '';
-const CURRENCY = PRODUCT.tracking?.currencyCode || 'BDT';
+const RAW_CURRENCY = PRODUCT.tracking?.currencyCode || 'BDT';
+
+/**
+ * Meta only accepts a 3-letter ISO-4217 code (e.g. "BDT"). Anything else —
+ * empty string, symbol like "৳"/"Tk", lowercase — triggers
+ * "[Meta Pixel] - Parameter 'currency' is invalid". Normalize defensively so
+ * a bad env value can never reach fbq.
+ */
+function pixelCurrency() {
+  const code = String(RAW_CURRENCY || 'BDT').trim().toUpperCase();
+  return /^[A-Z]{3}$/.test(code) ? code : 'BDT';
+}
+
+/** Meta requires value as a plain number (no symbols/commas). Coerce + round. */
+function pixelValue(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v) || v < 0) return 0;
+  return Math.round(v * 100) / 100;
+}
 
 let initialized = false;
 
@@ -64,9 +82,11 @@ export function track(event, params = {}, eventID) {
 export function trackViewContent(product = PRODUCT) {
   track('ViewContent', {
     content_name: product.name,
+    content_ids: [product.name],
+    contents: [{ id: product.name, quantity: 1 }],
     content_type: 'product',
-    currency: CURRENCY,
-    value: product.price,
+    currency: pixelCurrency(),
+    value: pixelValue(product.price),
   });
 }
 
@@ -75,8 +95,9 @@ export function trackInitiateCheckout(product = PRODUCT) {
   track('InitiateCheckout', {
     content_name: product.name,
     content_type: 'product',
-    currency: CURRENCY,
-    value: product.price,
+    content_ids: [product.name],
+    currency: pixelCurrency(),
+    value: pixelValue(product.price),
     num_items: 1,
   });
 }
@@ -86,15 +107,44 @@ export function trackInitiateCheckout(product = PRODUCT) {
  * Meta collapses this with the server-side Purchase event.
  */
 export function trackPurchase({ value, eventID, contentName, numItems = 1 }) {
+  const numericValue = pixelValue(value);
+  const currency = pixelCurrency();
+  if (!pixelEnabled()) {
+    // Visible in DevTools console — if you see this, VITE_META_PIXEL_ID was
+    // empty at build time (Vite bakes env vars into the bundle) or
+    // fbevents.js was blocked (ad-blocker). Rebuild/redeploy with the ID set.
+    if (typeof window !== 'undefined') {
+      console.warn(
+        `[pixel] Purchase skipped: pixel disabled (PIXEL_ID=${PIXEL_ID ? 'set' : 'MISSING'}, fbq=${typeof window.fbq}).`,
+      );
+    }
+    return;
+  }
+  // NOTE: fbq('track', ...) signature is (event, params, opts) where opts
+  // carries { eventID } for browser ↔ CAPI deduplication. Do not merge
+  // eventID into params.
   track(
     'Purchase',
     {
       content_name: contentName || PRODUCT.name,
+      content_ids: [contentName || PRODUCT.name],
+      contents: [{ id: contentName || PRODUCT.name, quantity: numItems }],
       content_type: 'product',
-      currency: CURRENCY,
-      value,
+      currency,
+      value: numericValue,
       num_items: numItems,
     },
     eventID,
   );
+}
+
+/** Debug helper — call `window.__pixelStatus()` in DevTools console. */
+if (typeof window !== 'undefined') {
+  window.__pixelStatus = () => ({
+    pixelId: PIXEL_ID ? `${String(PIXEL_ID).slice(0, 2)}…${String(PIXEL_ID).slice(-2)}` : '(missing)',
+    currency: pixelCurrency(),
+    rawCurrency: RAW_CURRENCY,
+    fbqLoaded: typeof window.fbq === 'function',
+    initialized,
+  });
 }

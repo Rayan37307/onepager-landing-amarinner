@@ -1,4 +1,4 @@
-// /bra2 — Wireless Push-Up Bra, 3-piece combo. Starts from the default
+// /wireless-push-up-bra — Wireless Push-Up Bra, 3-piece combo. Starts from the default
 // product/content (brand, contact, districts, UI strings) and overrides only
 // what differs for this product.
 import { PRODUCT } from './product';
@@ -13,7 +13,7 @@ const IMAGES = [
 
 const SIZE_PRICE = 999;
 
-// Two delivery rates only: Dhaka 65, everywhere else 125. Shared with /bra3.
+// Two delivery rates only: Dhaka 65, everywhere else 125. Shared with /premium-strapless-padded-bra.
 export const TWO_RATE_SHIPPING = {
   ...PRODUCT.shipping,
   tiers: {

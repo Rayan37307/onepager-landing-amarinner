@@ -11,6 +11,9 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/guddi-bra" element={<GuddiBra />} />
+        <Route path="/wireless-push-up-bra" element={<Bra2 />} />
+        <Route path="/premium-strapless-padded-bra" element={<Bra3 />} />
+        {/* Legacy short URLs — keep working for existing ads/links */}
         <Route path="/bra2" element={<Bra2 />} />
         <Route path="/bra3" element={<Bra3 />} />
         <Route path="/" element={<Blank />} />

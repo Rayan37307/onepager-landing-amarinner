@@ -199,6 +199,14 @@ export function ArrowRightIcon(props) {
   );
 }
 
+export function CloseIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  );
+}
+
 const ICON_MAP = {
   fit: BraIcon,
   soft: CloudIcon,
